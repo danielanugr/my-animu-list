@@ -1,0 +1,25 @@
+Col {
+  margin-bottom: 15px;
+}
+
+Card {
+  height: 42em;
+}
+
+Card.Img {
+  height: 23em;
+}
+
+Card.Title {
+  height: 3em;
+  font-size: 1.25em;
+}
+
+Card.Text {
+  height: 8em;
+  font-size: 1em;
+}
+
+ListGroupItem {
+  padding: 20px 0;
+}
