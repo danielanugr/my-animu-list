@@ -2,48 +2,41 @@ import React from 'react'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import Spinner from 'react-bootstrap/Spinner'
 import AnimeCard from '../Components/AnimeCard'
-import useFetchSeason from '../Hooks/useFetchSeason'
+import useFetch from '../Hooks/useFetch'
+
+import './Home.css'
 
 function Home () {
   const [season, setSeason] = React.useState('winter')
-  const [animes] = useFetchSeason(season)
+  const url = `https://api.jikan.moe/v3/season/2021/${season}`
+  const [animes, loading] = useFetch(url)
 
-  function winterSeason (e) {
+  function changeSeason (newSeason, e) {
     e.preventDefault()
-    setSeason('winter')
-  }
-
-  function springSeason (e) {
-    e.preventDefault()
-    setSeason('spring')
-  }
-
-  function summerSeason (e) {
-    e.preventDefault()
-    setSeason('summer')
-  }
-
-  function fallSeason (e) {
-    e.preventDefault()
-    setSeason('fall')
+    setSeason(newSeason)
   }
 
   return (
     <div>
       <hr />
       <div className='d-flex justify-content-center'>
-        <h1>Seasonal Anime Database</h1>
+        <h1>{season[0].toUpperCase() + season.substring(1)} Anime Database</h1>
       </div>
-      <hr style={{ marginBottom: '0' }} />
-      <Container fluid>
+      <hr className='divider-top' />
+      <Container fluid className='nav-season'>
         <Row>
           <Col
             sm={3}
             className='text-center bg-primary'
             style={{ padding: '10px 16px' }}
           >
-            <a href='winter' className='link-light' onClick={winterSeason}>
+            <a
+              href='winter'
+              className='text-light'
+              onClick={e => changeSeason('winter', e)}
+            >
               Winter
             </a>
           </Col>
@@ -52,7 +45,11 @@ function Home () {
             className='text-center bg-success'
             style={{ padding: '10px 16px' }}
           >
-            <a href='spring' className='link-light' onClick={springSeason}>
+            <a
+              href='spring'
+              className='text-light'
+              onClick={e => changeSeason('spring', e)}
+            >
               Spring
             </a>
           </Col>
@@ -61,7 +58,11 @@ function Home () {
             className='text-center bg-warning'
             style={{ padding: '10px 16px' }}
           >
-            <a href='summer' className='link-light' onClick={summerSeason}>
+            <a
+              href='summer'
+              className='text-light'
+              onClick={e => changeSeason('summer', e)}
+            >
               Summer
             </a>
           </Col>
@@ -70,60 +71,35 @@ function Home () {
             className='text-center bg-danger'
             style={{ padding: '10px 16px' }}
           >
-            <a href='fall' className='link-light' onClick={fallSeason}>
+            <a
+              href='fall'
+              className='text-light'
+              onClick={e => changeSeason('fall', e)}
+            >
               Fall
             </a>
           </Col>
         </Row>
       </Container>
-      <hr style={{ marginTop: '0' }} />
-      <Container>
-        <Row>
-          {animes.map(anime => (
-            <AnimeCard anime={anime} key={anime.mal_id} />
-          ))}
-        </Row>
-      </Container>
+      <hr className='divider-bottom' />
+      {loading ? (
+        <div className='d-flex justify-content-center'>
+          <Spinner animation='border' />
+        </div>
+      ) : (
+        <Container>
+          <Row>
+            {animes.map(anime => (
+              <AnimeCard anime={anime} key={anime.mal_id} />
+            ))}
+          </Row>
+        </Container>
+      )}
+      <button type='button' className='btn btn-success btn-circle btn-xl'>
+        <i className='fa fa-search'></i>
+      </button>
     </div>
   )
 }
-
-// class Home extends React.Component {
-//   constructor (props) {
-//     super(props)
-//     this.state = {
-//       animes: []
-//     }
-//   }
-
-//   componentDidMount () {
-//     fetch('https://api.jikan.moe/v3/season/2021/winter')
-//       .then(res => res.json())
-//       .then(({ anime }) => {
-//         this.setState({
-//           animes: anime
-//         })
-//       })
-//   }
-
-//   render () {
-//     return (
-//       <div>
-//         <hr />
-//         <div className='d-flex justify-content-center'>
-//           <h1>Seasonal Anime Database</h1>
-//         </div>
-//         <hr />
-//         <div className='container-sm'>
-//           <div className='row'>
-//             {this.state.animes.map(anime => (
-//               <Card anime={anime} key={anime.mal_id} />
-//             ))}
-//           </div>
-//         </div>
-//       </div>
-//     )
-//   }
-// }
 
 export default Home

@@ -1,0 +1,24 @@
+.column {
+  margin-bottom: 15px;
+}
+
+.shadow.bg-white.rounded {
+  height: 47em;
+}
+
+.image-card {
+  height: 23em;
+}
+
+.card-title {
+  height: 3.5rem;
+}
+
+.card-synopsis {
+  height: 8em;
+  font-size: 1em;
+}
+
+.btn-fav {
+  width: 100%;
+}

@@ -2,70 +2,64 @@ import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
 import ListGroup from 'react-bootstrap/ListGroup'
 import ListGroupItem from 'react-bootstrap/ListGroupItem'
+import Button from 'react-bootstrap/Button'
+import { useHistory } from 'react-router-dom'
+
+import './AnimeCard.css'
 
 function AnimeCard (props) {
-  const { anime } = props
+  const { image_url, title, synopsis, score, mal_id } = props.anime
+  const history = useHistory()
+
+  function showDetail (id, e) {
+    e.preventDefault()
+    history.push(`/anime/${id}`)
+  }
+
   return (
-    <Col sm={3} style={{ marginBottom: '15px' }}>
-      <Card className='shadow bg-white rounded' style={{ height: '42em' }}>
+    <Col className='column' sm={3}>
+      <Card className='shadow bg-white rounded'>
         <Card.Img
+          className='image-card'
           variant='top'
-          src={anime.image_url}
-          alt={anime.title}
-          style={{ height: '23em' }}
+          src={image_url}
+          alt={title}
         />
         <Card.Body>
-          <Card.Title style={{ height: '3em', fontSize: '1.25em' }}>
-            {anime.title}
+          <Card.Title
+            className='card-title'
+            style={
+              title.length > 45
+                ? { fontSize: '0.975em' }
+                : { fontSize: '1.25em' }
+            }
+          >
+            {title}
           </Card.Title>
-          <Card.Text style={{ height: '8em', fontSize: '1em' }}>
-            {anime.synopsis.substring(0, 125)}...
+          <Card.Text className='card-synopsis'>
+            {synopsis.substring(0, 125)}...
             <span>
-              <a href='readmore'>Read More</a>
+              <a href='readmore' onClick={e => showDetail(mal_id, e)}>
+                Read More
+              </a>
             </span>
           </Card.Text>
-          <ListGroup className='list-group-flush'>
-            <ListGroupItem style={{ padding: '20px 0' }}>
-              Rating: <strong>{anime.score}/10</strong>
-            </ListGroupItem>
-          </ListGroup>
+        </Card.Body>
+        <ListGroup className='list-group-flush'>
+          <ListGroupItem className='list-score'>
+            Rating: <strong>{score}/10</strong>
+          </ListGroupItem>
+        </ListGroup>
+        <Card.Body>
+          <Card.Link href='addFav'>
+            <Button className='btn-fav' variant='danger'>
+              Add to Favorite
+            </Button>
+          </Card.Link>
         </Card.Body>
       </Card>
     </Col>
   )
 }
-
-// class Card extends React.Component {
-//   render () {
-//     const { anime } = this.props
-//     return (
-//       <div className='col-sm-3' style={{ marginBottom: '15px' }}>
-//         <div className='card shadow bg-white rounded'>
-//           <img
-//             src={anime.image_url}
-//             className='card-img-top'
-//             alt={anime.title}
-//           />
-//           <div className='card-body'>
-//             <h5 className='card-title'>{anime.title}</h5>
-//             <p className='card-text'>
-//               {anime.synopsis.substring(0, 125)}...
-//               <span>
-//                 <a href='read'>read more</a>
-//               </span>
-//             </p>
-//           </div>
-//           <div>
-//             <ul className='list-group list-group-flush'>
-//               <li className='list-group-item'>
-//                 Score: <strong>{anime.score}/10</strong>
-//               </li>
-//             </ul>
-//           </div>
-//         </div>
-//       </div>
-//     )
-//   }
-// }
 
 export default AnimeCard

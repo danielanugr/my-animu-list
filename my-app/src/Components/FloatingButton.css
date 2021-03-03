@@ -1,0 +1,22 @@
+.btn-circle.btn-xl {
+  width: 70px;
+  height: 70px;
+  padding: 10px 16px;
+  border-radius: 35px;
+  font-size: 24px;
+  line-height: 1.33;
+  z-index: 999;
+}
+
+.btn-danger.btn-circle.btn-xl {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+}
+
+.btn-success {
+  position: fixed;
+  bottom: 90px;
+  right: 15px;
+}
+
