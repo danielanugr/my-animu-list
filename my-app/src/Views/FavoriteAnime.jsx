@@ -3,10 +3,17 @@ import { useSelector } from 'react-redux'
 import FavAnimeCard from '../Components/FavAnimeCard'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
+import { useHistory } from 'react-router-dom'
 
 export default function FavoriteAnime () {
   const favorites = useSelector(state => state.favorites)
-  console.log(favorites)
+  const history = useHistory()
+
+  function goToHome (e) {
+    e.preventDefault()
+    history.push('/')
+  }
+
   return (
     <>
       <hr />
@@ -24,6 +31,13 @@ export default function FavoriteAnime () {
           </Row>
         </Container>
       </div>
+      <button
+        type='button'
+        className='btn btn-success btn-circle btn-xl'
+        onClick={goToHome}
+      >
+        <i className='fa fa-home'></i>
+      </button>
     </>
   )
 }

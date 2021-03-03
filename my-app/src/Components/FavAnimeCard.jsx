@@ -16,41 +16,43 @@ function FavAnimeCard (props) {
   }
 
   return (
-    <Col className='column' sm={3}>
-      <Card className='shadow bg-white rounded'>
-        <Card.Img
-          className='image-card'
-          variant='top'
-          src={image_url}
-          alt={title}
-        />
-        <Card.Body>
-          <Card.Title
-            className='card-title'
-            style={
-              title.length > 45
-                ? { fontSize: '0.975em' }
-                : { fontSize: '1.25em' }
-            }
-          >
-            {title}
-          </Card.Title>
-          <Card.Text className='card-synopsis'>
-            {synopsis.substring(0, 125)}...
-            <span>
-              <a href='readmore' onClick={e => showDetail(mal_id, e)}>
-                Read More
-              </a>
-            </span>
-          </Card.Text>
-        </Card.Body>
-        <ListGroup className='list-group-flush'>
-          <ListGroupItem className='list-score'>
-            Rating: <strong>{score}/10</strong>
-          </ListGroupItem>
-        </ListGroup>
-      </Card>
-    </Col>
+    <>
+      <Col className='column' sm={3}>
+        <Card className='shadow bg-white rounded'>
+          <Card.Img
+            className='image-card'
+            variant='top'
+            src={image_url}
+            alt={title}
+          />
+          <Card.Body>
+            <Card.Title
+              className='card-title'
+              style={
+                title.length > 45
+                  ? { fontSize: '0.975em' }
+                  : { fontSize: '1.25em' }
+              }
+            >
+              {title}
+            </Card.Title>
+            <Card.Text className='card-synopsis'>
+              {synopsis.substring(0, 125)}...
+              <span>
+                <a href='readmore' onClick={e => showDetail(mal_id, e)}>
+                  Read More
+                </a>
+              </span>
+            </Card.Text>
+          </Card.Body>
+          <ListGroup className='list-group-flush'>
+            <ListGroupItem className='list-score'>
+              Rating: <strong>{score}/10</strong>
+            </ListGroupItem>
+          </ListGroup>
+        </Card>
+      </Col>
+    </>
   )
 }
 
