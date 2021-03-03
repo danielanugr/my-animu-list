@@ -2,22 +2,13 @@ import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
 import ListGroup from 'react-bootstrap/ListGroup'
 import ListGroupItem from 'react-bootstrap/ListGroupItem'
-import Button from 'react-bootstrap/Button'
 import { useHistory } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { addFavorite } from '../Store'
 
 import './AnimeCard.css'
 
-function AnimeCard (props) {
+function FavAnimeCard (props) {
   const { image_url, title, synopsis, score, mal_id } = props.anime
   const history = useHistory()
-  const dispatch = useDispatch()
-
-  function addToFavorite (e) {
-    e.preventDefault()
-    dispatch(addFavorite(props.anime))
-  }
 
   function showDetail (id, e) {
     e.preventDefault()
@@ -58,20 +49,9 @@ function AnimeCard (props) {
             Rating: <strong>{score}/10</strong>
           </ListGroupItem>
         </ListGroup>
-        <Card.Body>
-          <Card.Link href='addFav'>
-            <Button
-              className='btn-fav'
-              onClick={e => addToFavorite(e)}
-              variant='danger'
-            >
-              Add to Favorite
-            </Button>
-          </Card.Link>
-        </Card.Body>
       </Card>
     </Col>
   )
 }
 
-export default AnimeCard
+export default FavAnimeCard

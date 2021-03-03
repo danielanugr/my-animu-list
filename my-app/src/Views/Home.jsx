@@ -5,17 +5,21 @@ import Col from 'react-bootstrap/Col'
 import Spinner from 'react-bootstrap/Spinner'
 import AnimeCard from '../Components/AnimeCard'
 import useFetch from '../Hooks/useFetch'
+import { useSelector, useDispatch } from 'react-redux'
+import { changeSeason } from '../Store'
 
 import './Home.css'
 
 function Home () {
-  const [season, setSeason] = React.useState('winter')
+  const season = useSelector(state => state.season)
   const url = `https://api.jikan.moe/v3/season/2021/${season}`
   const [animes, loading] = useFetch(url)
 
-  function changeSeason (newSeason, e) {
+  const dispatch = useDispatch()
+
+  function setSeason (newSeason, e) {
     e.preventDefault()
-    setSeason(newSeason)
+    dispatch(changeSeason(newSeason))
   }
 
   return (
@@ -35,7 +39,7 @@ function Home () {
             <a
               href='winter'
               className='text-light'
-              onClick={e => changeSeason('winter', e)}
+              onClick={e => setSeason('winter', e)}
             >
               Winter
             </a>
@@ -48,7 +52,7 @@ function Home () {
             <a
               href='spring'
               className='text-light'
-              onClick={e => changeSeason('spring', e)}
+              onClick={e => setSeason('spring', e)}
             >
               Spring
             </a>
@@ -61,7 +65,7 @@ function Home () {
             <a
               href='summer'
               className='text-light'
-              onClick={e => changeSeason('summer', e)}
+              onClick={e => setSeason('summer', e)}
             >
               Summer
             </a>
@@ -74,7 +78,7 @@ function Home () {
             <a
               href='fall'
               className='text-light'
-              onClick={e => changeSeason('fall', e)}
+              onClick={e => setSeason('fall', e)}
             >
               Fall
             </a>
@@ -89,9 +93,10 @@ function Home () {
       ) : (
         <Container>
           <Row>
-            {animes.map(anime => (
-              <AnimeCard anime={anime} key={anime.mal_id} />
-            ))}
+            {animes &&
+              animes?.anime.map(anime => (
+                <AnimeCard anime={anime} key={anime.mal_id} />
+              ))}
           </Row>
         </Container>
       )}

@@ -1,34 +1,34 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { changeAnime, changeLoading } from '../Store'
 
 export default function useFetch (url) {
-  const [data, setData] = useState([])
-  const [loading, setLoading] = useState(false)
+  const dispatch = useDispatch()
+  const animes = useSelector(state => state.animes)
+  const loading = useSelector(state => state.loading)
 
   useEffect(() => {
-    setLoading(true)
+    dispatch(changeLoading(true))
     fetch(url)
       .then(res => {
+        console.log(res)
         if (!res.ok) {
           throw Error(res)
         }
         return res.json()
       })
       .then(result => {
-        if (Array.isArray(result.anime)) {
-          setData(result.anime)
-        } else {
-          setData([...data, result])
-        }
+        dispatch(changeAnime(result))
       })
       .catch(err => {
         console.log(err)
       })
       .finally(() => {
         setTimeout(() => {
-          setLoading(false)
+          dispatch(changeLoading(false))
         }, 1250)
       })
-  }, [url])
+  }, [url, dispatch])
 
-  return [data, loading]
+  return [animes, loading]
 }
