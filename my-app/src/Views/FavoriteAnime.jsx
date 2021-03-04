@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import FavAnimeCard from '../Components/FavAnimeCard'
+import AnimeCard from '../Components/AnimeCard'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import { useHistory } from 'react-router-dom'
@@ -26,7 +26,7 @@ export default function FavoriteAnime () {
           <Row>
             {favorites &&
               favorites.map(favorite => (
-                <FavAnimeCard key={favorite.id} anime={favorite} />
+                <AnimeCard key={favorite.mal_id} anime={favorite} />
               ))}
           </Row>
         </Container>

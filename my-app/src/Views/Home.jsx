@@ -6,8 +6,11 @@ import Spinner from 'react-bootstrap/Spinner'
 import AnimeCard from '../Components/AnimeCard'
 import { useSelector, useDispatch } from 'react-redux'
 import { changeSeason } from '../Store'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { fetchAnime } from '../Store'
+import '../Components/SearchPopup.css'
+import { DebounceInput } from 'react-debounce-input'
+import { useHistory } from 'react-router-dom'
 
 import './Home.css'
 
@@ -16,12 +19,31 @@ function Home () {
   const url = `https://api.jikan.moe/v3/season/2021/${season}`
   const animes = useSelector(state => state.anime.animes)
   const loading = useSelector(state => state.loading.loading)
+  const [showSearch, setShowSearch] = useState(false)
+  const [value, setValue] = useState('')
 
+  const history = useHistory()
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(fetchAnime(url))
   }, [url, dispatch])
+
+  function showPopup (e) {
+    e.preventDefault()
+    setShowSearch(!showSearch)
+  }
+
+  function searchAnime () {
+    const searchUrl = `https://api.jikan.moe/v3/search/anime?q=${value}`
+    dispatch(fetchAnime(searchUrl))
+    setShowSearch(false)
+    history.push('/search')
+  }
+
+  function handleChange (e) {
+    setValue(e.target.value)
+  }
 
   function setSeason (newSeason, e) {
     e.preventDefault()
@@ -30,6 +52,21 @@ function Home () {
 
   return (
     <div>
+      <div
+        className='overlay'
+        style={showSearch ? { display: 'block' } : { display: 'none' }}
+      >
+        <div className='overlay-content'>
+          <DebounceInput
+            className='search-field'
+            debounceTimeout={1000}
+            onChange={handleChange}
+          />
+          <button onClick={searchAnime}>
+            <i className='fa fa-search'></i>
+          </button>
+        </div>
+      </div>
       <div className='d-flex justify-content-center'>
         <h1 className='text-center'>
           {season[0].toUpperCase() + season.substring(1)} Anime Database
@@ -113,7 +150,11 @@ function Home () {
           )}
         </Container>
       )}
-      <button type='button' className='btn btn-success btn-circle btn-xl'>
+      <button
+        onClick={showPopup}
+        type='button'
+        className='btn btn-success btn-circle btn-xl'
+      >
         <i className='fa fa-search'></i>
       </button>
     </div>
