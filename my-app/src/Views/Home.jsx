@@ -4,18 +4,24 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Spinner from 'react-bootstrap/Spinner'
 import AnimeCard from '../Components/AnimeCard'
-import useFetch from '../Hooks/useFetch'
 import { useSelector, useDispatch } from 'react-redux'
 import { changeSeason } from '../Store'
+import { useEffect } from 'react'
+import { fetchAnime } from '../Store'
 
 import './Home.css'
 
 function Home () {
-  const season = useSelector(state => state.season)
+  const season = useSelector(state => state.season.season)
   const url = `https://api.jikan.moe/v3/season/2021/${season}`
-  const [animes, loading] = useFetch(url)
+  const animes = useSelector(state => state.anime.animes)
+  const loading = useSelector(state => state.loading.loading)
 
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(fetchAnime(url))
+  }, [url, dispatch])
 
   function setSeason (newSeason, e) {
     e.preventDefault()
@@ -24,9 +30,10 @@ function Home () {
 
   return (
     <div>
-      <hr />
       <div className='d-flex justify-content-center'>
-        <h1>{season[0].toUpperCase() + season.substring(1)} Anime Database</h1>
+        <h1 className='text-center'>
+          {season[0].toUpperCase() + season.substring(1)} Anime Database
+        </h1>
       </div>
       <hr className='divider-top' />
       <Container fluid className='nav-season'>
@@ -92,12 +99,18 @@ function Home () {
         </div>
       ) : (
         <Container>
-          <Row>
-            {animes &&
-              animes?.anime.map(anime => (
-                <AnimeCard anime={anime} key={anime.mal_id} />
-              ))}
-          </Row>
+          {animes?.anime?.length === 0 ? (
+            <div className='d-flex justify-content-center'>
+              <h2 className='text-center'>No info about this season yet.</h2>
+            </div>
+          ) : (
+            <Row>
+              {animes &&
+                animes?.anime?.map(anime => (
+                  <AnimeCard anime={anime} key={anime.mal_id} />
+                ))}
+            </Row>
+          )}
         </Container>
       )}
       <button type='button' className='btn btn-success btn-circle btn-xl'>

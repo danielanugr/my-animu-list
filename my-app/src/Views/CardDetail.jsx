@@ -7,32 +7,54 @@ import Button from 'react-bootstrap/Button'
 import Badge from 'react-bootstrap/Badge'
 import Spinner from 'react-bootstrap/Spinner'
 import { useParams } from 'react-router-dom'
-import useFetch from '../Hooks/useFetch'
 import { useHistory } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { addFavorite } from '../Store'
+import { useState, useEffect } from 'react'
+import { fetchAnime } from '../Store'
 
 export default function CardDetail () {
   const { id } = useParams()
   const url = `https://api.jikan.moe/v3/anime/${id}`
-  const [anime, loading] = useFetch(url)
+  const anime = useSelector(state => state.anime.animes)
+  const loading = useSelector(state => state.loading.loading)
+
   const history = useHistory()
   const dispatch = useDispatch()
+
+  const [isFavorite, setFavorite] = useState(false)
+  const favorites = useSelector(state => state.favorite.favorites)
+
+  useEffect(() => {
+    dispatch(fetchAnime(url))
+    if (favorites.length === 0) {
+      setFavorite(false)
+    } else {
+      const found = favorites.find(
+        favorite => favorite.mal_id === anime?.mal_id
+      )
+      if (found) {
+        setFavorite(true)
+      } else {
+        setFavorite(false)
+      }
+    }
+  }, [favorites, anime?.mal_id, dispatch, url])
 
   function goToHome (e) {
     e.preventDefault()
     history.push('/')
   }
 
-  function addToFavorite (payload) {
-    dispatch(addFavorite(payload))
+  function addToFavorite () {
+    dispatch(addFavorite(anime))
   }
 
   return (
     <>
       <hr />
       <div className='d-flex justify-content-center'>
-        <h1>Seasonal Anime Database</h1>
+        <h1 className='text-center'>Anime Detail</h1>
       </div>
       <hr />
       <div>
@@ -44,7 +66,7 @@ export default function CardDetail () {
                   <img
                     src={anime?.image_url}
                     alt={anime?.title}
-                    style={{ width: '100%', height: '100%' }}
+                    style={{ width: '100%' }}
                   />
                 </Col>
                 <Col>
@@ -56,7 +78,7 @@ export default function CardDetail () {
                   <hr />
                   <p>Studios:</p>
                   <ul>
-                    {anime?.studios.map(studio => (
+                    {anime?.studios?.map(studio => (
                       <li key={studio.mal_id}>{studio?.name}</li>
                     ))}
                   </ul>
@@ -66,20 +88,26 @@ export default function CardDetail () {
                     Genre:{' '}
                     <span>
                       {anime &&
-                        anime?.genres.map(genre => (
+                        anime?.genres?.map(genre => (
                           <Badge key={genre.mal_id} pill variant='primary'>
                             {genre.name}
                           </Badge>
                         ))}
                     </span>
                   </p>
-                  <Button
-                    className='btn-fav'
-                    onClick={() => addToFavorite(anime)}
-                    variant='danger'
-                  >
-                    Add to Favorite
-                  </Button>
+                  {!isFavorite ? (
+                    <Button
+                      className='btn-fav'
+                      onClick={e => addToFavorite(e)}
+                      variant='danger'
+                    >
+                      Add to Favorite
+                    </Button>
+                  ) : (
+                    <Button className='btn-fav' variant='danger' disabled>
+                      Your Favorite
+                    </Button>
+                  )}
                 </Col>
               </Row>
             </Card>

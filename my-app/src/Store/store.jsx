@@ -1,28 +1,17 @@
-import { createStore } from 'redux'
+import { createStore, combineReducers, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
+import animeReducer from './reducers/anime'
+import seasonReducer from './reducers/season'
+import loadingReducer from './reducers/loading'
+import favoriteReducer from './reducers/favorite'
 
-const initialState = {
-  animes: null,
-  loading: false,
-  season: 'winter',
-  favorites: []
-}
+const rootReducer = combineReducers({
+  anime: animeReducer,
+  season: seasonReducer,
+  loading: loadingReducer,
+  favorite: favoriteReducer
+})
 
-function reducer (state = initialState, action) {
-  const { type, payload } = action
-  switch (type) {
-    case 'ANIMES/CHANGEANIME':
-      return { ...state, animes: payload }
-    case 'SEASON/CHANGESEASON':
-      return { ...state, season: payload }
-    case 'LOADING/CHANGELOADING':
-      return { ...state, loading: payload }
-    case 'FAVORITES/ADDFAVORITE':
-      return { ...state, favorites: [...state.favorites, payload] }
-    default:
-      return state
-  }
-}
-
-const store = createStore(reducer)
+const store = createStore(rootReducer, applyMiddleware(thunk))
 
 export default store

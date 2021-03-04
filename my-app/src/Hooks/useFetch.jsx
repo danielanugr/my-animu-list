@@ -4,14 +4,13 @@ import { changeAnime, changeLoading } from '../Store'
 
 export default function useFetch (url) {
   const dispatch = useDispatch()
-  const animes = useSelector(state => state.animes)
-  const loading = useSelector(state => state.loading)
+  const animes = useSelector(state => state.anime.animes)
+  const loading = useSelector(state => state.loading.loading)
 
   useEffect(() => {
     dispatch(changeLoading(true))
     fetch(url)
       .then(res => {
-        console.log(res)
         if (!res.ok) {
           throw Error(res)
         }

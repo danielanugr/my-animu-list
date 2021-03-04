@@ -4,8 +4,9 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import ListGroupItem from 'react-bootstrap/ListGroupItem'
 import Button from 'react-bootstrap/Button'
 import { useHistory } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { addFavorite } from '../Store'
+import { useState, useEffect } from 'react'
 
 import './AnimeCard.css'
 
@@ -13,6 +14,21 @@ function AnimeCard (props) {
   const { image_url, title, synopsis, score, mal_id } = props.anime
   const history = useHistory()
   const dispatch = useDispatch()
+  const [isFavorite, setFavorite] = useState(false)
+  const favorites = useSelector(state => state.favorite.favorites)
+
+  useEffect(() => {
+    if (favorites.length === 0) {
+      setFavorite(false)
+    } else {
+      const found = favorites.find(favorite => favorite.mal_id === mal_id)
+      if (found) {
+        setFavorite(true)
+      } else {
+        setFavorite(false)
+      }
+    }
+  }, [favorites, mal_id])
 
   function addToFavorite (e) {
     e.preventDefault()
@@ -59,7 +75,7 @@ function AnimeCard (props) {
           </ListGroupItem>
         </ListGroup>
         <Card.Body>
-          <Card.Link href='addFav'>
+          {!isFavorite ? (
             <Button
               className='btn-fav'
               onClick={e => addToFavorite(e)}
@@ -67,7 +83,11 @@ function AnimeCard (props) {
             >
               Add to Favorite
             </Button>
-          </Card.Link>
+          ) : (
+            <Button className='btn-fav' variant='danger' disabled>
+              Your Favorite
+            </Button>
+          )}
         </Card.Body>
       </Card>
     </Col>

@@ -1,15 +1,37 @@
 export function changeSeason (payload) {
-  return { type: 'SEASON/CHANGESEASON', payload }
+  return dispatch => {
+    dispatch({ type: 'SEASON/CHANGESEASON', payload })
+  }
 }
 
 export function changeAnime (payload) {
-  return { type: 'ANIMES/CHANGEANIME', payload }
+  return dispatch => {
+    dispatch({ type: 'ANIMES/CHANGEANIME', payload })
+  }
 }
 
 export function changeLoading (payload) {
-  return { type: 'LOADING/CHANGELOADING', payload }
+  return dispatch => {
+    dispatch({ type: 'LOADING/CHANGELOADING', payload })
+  }
 }
 
 export function addFavorite (payload) {
-  return { type: 'FAVORITES/ADDFAVORITE', payload }
+  return dispatch => {
+    dispatch({ type: 'FAVORITES/ADDFAVORITE', payload })
+  }
+}
+
+export function fetchAnime (url) {
+  return async dispatch => {
+    try {
+      dispatch(changeLoading(true))
+      const res = await fetch(url)
+      const anime = await res.json()
+      dispatch(changeAnime(anime))
+      dispatch(changeLoading(false))
+    } catch (err) {
+      console.log(err)
+    }
+  }
 }

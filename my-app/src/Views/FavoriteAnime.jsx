@@ -6,7 +6,7 @@ import Row from 'react-bootstrap/Row'
 import { useHistory } from 'react-router-dom'
 
 export default function FavoriteAnime () {
-  const favorites = useSelector(state => state.favorites)
+  const favorites = useSelector(state => state.favorite.favorites)
   const history = useHistory()
 
   function goToHome (e) {
@@ -18,7 +18,7 @@ export default function FavoriteAnime () {
     <>
       <hr />
       <div className='d-flex justify-content-center'>
-        <h1>Your Favorite Anime</h1>
+        <h1 className='text-center'>Your Favorite Anime</h1>
       </div>
       <hr />
       <div>
