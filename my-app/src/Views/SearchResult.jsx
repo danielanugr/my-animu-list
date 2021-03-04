@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row'
 import Spinner from 'react-bootstrap/Spinner'
 import AnimeCard from '../Components/AnimeCard'
 import { useSelector, useDispatch } from 'react-redux'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { fetchAnime } from '../Store'
 import '../Components/SearchPopup.css'
 import { DebounceInput } from 'react-debounce-input'
@@ -15,16 +15,16 @@ function SearchResult () {
   const [showSearch, setShowSearch] = useState(false)
   const [value, setValue] = useState('')
   const dispatch = useDispatch()
+  const searchUrl = `https://api.jikan.moe/v3/search/anime?q=${value}`
+
+  useEffect(() => {
+    dispatch(fetchAnime(searchUrl))
+    setShowSearch(false)
+  }, [value, searchUrl, dispatch])
 
   function showPopup (e) {
     e.preventDefault()
     setShowSearch(!showSearch)
-  }
-
-  function searchAnime () {
-    const searchUrl = `https://api.jikan.moe/v3/search/anime?q=${value}`
-    dispatch(fetchAnime(searchUrl))
-    setShowSearch(false)
   }
 
   function handleChange (e) {
@@ -40,12 +40,9 @@ function SearchResult () {
         <div className='overlay-content'>
           <DebounceInput
             className='search-field'
-            debounceTimeout={1000}
+            debounceTimeout={750}
             onChange={handleChange}
           />
-          <button onClick={searchAnime}>
-            <i className='fa fa-search'></i>
-          </button>
         </div>
       </div>
       <div className='d-flex justify-content-center'>
