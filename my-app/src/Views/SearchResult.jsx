@@ -3,48 +3,24 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Spinner from 'react-bootstrap/Spinner'
 import AnimeCard from '../Components/AnimeCard'
-import { useSelector, useDispatch } from 'react-redux'
-import { useState, useEffect } from 'react'
-import { fetchAnime } from '../Store'
+import { useSelector } from 'react-redux'
+import { useState } from 'react'
 import '../Components/SearchPopup.css'
-import { DebounceInput } from 'react-debounce-input'
+import SearchBar from '../Components/SearchBar'
 
 function SearchResult () {
   const animes = useSelector(state => state.anime.animes)
   const loading = useSelector(state => state.loading.loading)
   const [showSearch, setShowSearch] = useState(false)
-  const [value, setValue] = useState('')
-  const dispatch = useDispatch()
-  const searchUrl = `https://api.jikan.moe/v3/search/anime?q=${value}`
-
-  useEffect(() => {
-    dispatch(fetchAnime(searchUrl))
-    setShowSearch(false)
-  }, [value, searchUrl, dispatch])
 
   function showPopup (e) {
     e.preventDefault()
     setShowSearch(!showSearch)
   }
 
-  function handleChange (e) {
-    setValue(e.target.value)
-  }
-
   return (
     <div>
-      <div
-        className='overlay'
-        style={showSearch ? { display: 'block' } : { display: 'none' }}
-      >
-        <div className='overlay-content'>
-          <DebounceInput
-            className='search-field'
-            debounceTimeout={750}
-            onChange={handleChange}
-          />
-        </div>
-      </div>
+      <SearchBar showSearch={showSearch} />
       <div className='d-flex justify-content-center'>
         <h1 className='text-center'>Search Result</h1>
       </div>
