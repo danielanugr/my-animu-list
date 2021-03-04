@@ -71,7 +71,7 @@ function AnimeCard (props) {
         </Card.Body>
         <ListGroup className='list-group-flush'>
           <ListGroupItem className='list-score'>
-            Rating: <strong>{score}/10</strong>
+            Rating: <strong>{score ? score : '-'}/10</strong>
           </ListGroupItem>
         </ListGroup>
         <Card.Body>
