@@ -21,6 +21,7 @@ function Home () {
   const loading = useSelector(state => state.loading.loading)
   const [showSearch, setShowSearch] = useState(false)
   const [value, setValue] = useState('')
+  const searchUrl = `https://api.jikan.moe/v3/search/anime?q=${value}`
 
   const history = useHistory()
   const dispatch = useDispatch()
@@ -35,7 +36,6 @@ function Home () {
   }
 
   function searchAnime () {
-    const searchUrl = `https://api.jikan.moe/v3/search/anime?q=${value}`
     dispatch(fetchAnime(searchUrl))
     setShowSearch(false)
     history.push('/search')

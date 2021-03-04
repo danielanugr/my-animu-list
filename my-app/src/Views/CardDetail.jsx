@@ -74,7 +74,7 @@ export default function CardDetail () {
                   <hr />
                   <p>{anime?.synopsis}</p>
                   <hr />
-                  <p>Score: {anime?.score}/10</p>
+                  <p>Score: {anime?.score ? anime?.score : '-'}/10</p>
                   <hr />
                   <p>Studios:</p>
                   <ul>
