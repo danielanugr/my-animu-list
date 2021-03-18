@@ -59,7 +59,7 @@ function Home () {
         <div className='overlay-content'>
           <DebounceInput
             className='search-field'
-            debounceTimeout={1000}
+            debounceTimeout={300}
             onChange={handleChange}
           />
           <button onClick={searchAnime}>
